@@ -1,0 +1,54 @@
+﻿@model IEnumerable<DocumentManagementSystem.DAL.Views.DocumentView>
+
+<div class="container-fluid">
+    <h3 id="category">All</h3>
+</div>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th class="col-lg-1">
+                @Html.DisplayNameFor(model => model.categoryName)
+            </th>
+            <th class="col-lg-3">
+                @Html.DisplayNameFor(model => model.content)
+            </th>
+            <th class="col-lg-6">
+                @Html.DisplayNameFor(model => model.url)
+            </th>
+            <th class="col-lg-1">
+
+            </th>
+            <th class="col-lg-1">
+
+            </th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.categoryName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.content)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.url)
+                </td>
+                <td>
+                    <button class="btn btn-default" onclick="updateDocument(@item.documentId, '@item.categoryName', '@item.content', '@item.url')">Edit</button>
+                </td>
+                <td>
+                    @using (Html.BeginForm("deleteDocument", "Home", new { documentId = item.documentId }, FormMethod.Post))
+                    {
+                        <button class="btn btn-default" type="submit">Delete</button>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

@@ -1,0 +1,87 @@
+﻿@{
+    ViewBag.Title = "";
+}
+
+@model DocumentManagementSystem.DAL.Views.DocumentView
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - InventoryManagementSystem</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">DocumentManagementSystem</a>
+            </div>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        Select Category
+                        <span class="caret"></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        @{Html.RenderAction("getSubjectsPartialView", "Home");}
+                    </ul>
+                </li>
+                <button class="btn btn-default navbar-btn" data-toggle="modal" data-target="#myModal">new Document</button>
+            </ul>
+        </div>
+    </nav>
+        <div class="container-fluid" id="popupForUpdateView"></div>
+        <div class="container-fluid" id="documentsPartialView">
+            @{Html.RenderAction("documentsPartialView", "Home", new { categoryName = "All" });}
+        </div>
+
+        <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <p class="navbar-brand">&copy; @DateTime.Now.Year - InventoryManagementSystem</p>
+                </div>
+            </div>
+        </nav>
+
+        @{ Html.RenderPartial("popupForInputView"); }
+
+        @Scripts.Render("~/bundles/jquery")
+        @Scripts.Render("~/bundles/bootstrap")
+
+        <script type="text/javascript">
+         $('.selectCategory').on('click', function () {
+             var categoryName = this.textContent;
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("documentsPartialView", "Home")',
+                data: { categoryName: categoryName }
+            }).done(function (result) {
+                $("#documentsPartialView").html(result);
+                $("#category").html(categoryName);
+            });
+        });
+
+        function updateDocument(documentId, categoryName, content, url) {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("popupForUpdateView", "Home")',
+                data: {
+                    documentId: documentId,
+                    categoryName: categoryName,
+                    content: content,
+                    url: url
+                }
+            }).done(function (result) {
+                $("#popupForUpdateView").html(result);
+                $("#editModal").modal();
+            });
+        }
+        </script>
+</body>
+</html>
+
+
